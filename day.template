@@ -1,0 +1,19 @@
+from days.base import Day
+
+
+class Day$dayNum(Day):
+
+    def __init__(self):
+        super().__init__('days/day_$dayNum/input.txt')
+
+    def part_one(self):
+        pass
+
+    def part_two(self):
+        pass
+
+
+if __name__ == '__main__':
+    day = Day$dayNum()
+    print(day.part_one())
+    print(day.part_two())
