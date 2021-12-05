@@ -23,11 +23,11 @@ class Day05(Day):
         return start_x, stop_x, start_y, stop_y
 
     @staticmethod
-    def check_line_cond(line):
+    def is_straight(line):
         return line[0] == line[2] or line[1] == line[3]
 
     @staticmethod
-    def check_diagonal_cond(line):
+    def is_diagonal(line):
         diff_x = abs(line[0] - line[2])
         diff_y = abs(line[1] - line[3])
         return diff_x == diff_y
@@ -44,9 +44,15 @@ class Day05(Day):
         return len(dangerous_areas[0])
 
     def fill_simple_line(self, line):
-        if self.check_line_cond(line):
+        if self.is_straight(line):
             start_x, stop_x, start_y, stop_y = self.parse_simple_line_coordinates(line)
             self.mask[start_x:stop_x, start_y: stop_y] += 1
+
+    def fill_diagonal(self, line):
+        if self.is_diagonal(line):
+            x_s, y_s = self.generate_diagonal_indexes(*line)
+            for position in zip(x_s, y_s):
+                self.mask[position] += 1
 
     def part_one(self):
         for line in self.lines:
@@ -54,13 +60,11 @@ class Day05(Day):
         return self.calculate_dangerous_areas()
 
     def part_two(self):
+        # Cleanup
         self.mask[:] = 0
         for line in self.lines:
             self.fill_simple_line(line)
-            if self.check_diagonal_cond(line):
-                x_s, y_s = self.generate_diagonal_indexes(*line)
-                for position in zip(x_s, y_s):
-                    self.mask[position] += 1
+            self.fill_diagonal(line)
         return self.calculate_dangerous_areas()
 
 
